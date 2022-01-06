@@ -4,8 +4,8 @@ import classes from "./Logo.css"
 
 const logo = (props) => (
 
-    <div className="Logo">
-        <img src={burgerLogo}/>
+    <div className="Logo" style={{height: props.height}}>
+        <img src={burgerLogo} onClick={props.clicked}/>
     </div>
 
 );
