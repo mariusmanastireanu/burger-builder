@@ -1,6 +1,7 @@
 import React from "react"
 import IngredientControl from "./IngredientControl/IngredientControl"
 import classes from './IngredientController.css'
+import { BASE_PRICE}  from "../../containers/BurgerBuilder/BurgetBuilder"
 
 const controls = [
     {name: 'Salad', type: 'salad'},
@@ -23,6 +24,11 @@ const ingredientController = ( props ) => {
                     /> 
             ))
         }
+        <button 
+            className="OrderButton"
+            disabled={props.price === BASE_PRICE}
+            onClick={props.checkout}>Order
+        </button>
     </div>
 }
 

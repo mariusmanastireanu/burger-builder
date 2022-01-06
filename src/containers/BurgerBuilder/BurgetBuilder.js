@@ -1,33 +1,38 @@
 import React, { Component } from "react";
 import Burger from "../../components/Burger/Burger";
 import IngredientController from "../../components/IngredientController/IngredientController";
+import Modal from "../../components/UI/Modal/Modal"
+import OrderSummary from "../../components/OrderSummary/OrderSummary"
 
 const INGREDIENT_PRICES = {
-    salad: 0.5,
-    cheese: 0.6,
+    salad: 0.3,
+    cheese: 0.5,
     meat: 0.99,
     bacon: 0.6,
 }
+
+export const BASE_PRICE = 3.99
 
 class BurgerBuilder extends Component {
 
     state = {
         ingredients: {},
-        totalPrice: 3.99
+        totalPrice: BASE_PRICE,
+        checkoutMode: false,
     }
 
     addIngredientHandler = ( type ) => {
         const oldCount = this.state.ingredients[type] ? this.state.ingredients[type] : 0;
-        const updatedCount = oldCount + 1;
         const updatedIngredients = {
             ...this.state.ingredients
         };
-        updatedIngredients[type] = updatedCount;
+        updatedIngredients[type] =  oldCount + 1;
 
         const priceDelta = INGREDIENT_PRICES[type];
         const newPrice = this.state.totalPrice + priceDelta;
         this.setState({
-            totalPrice: newPrice, ingredients: updatedIngredients
+            totalPrice: newPrice,
+            ingredients: updatedIngredients
         })
     }
 
@@ -36,17 +41,30 @@ class BurgerBuilder extends Component {
         if (oldCount === 0) {
             return;
         }
-        const updatedCount = oldCount - 1;
         const updatedIngredients = {
             ...this.state.ingredients
         };
-        updatedIngredients[type] = updatedCount;
+        updatedIngredients[type] = oldCount - 1;
 
-        const priceDelta = INGREDIENT_PRICES[type] * -1;
-        const newPrice = this.state.totalPrice + priceDelta;
+        const priceDelta = INGREDIENT_PRICES[type];
+        const newPrice = this.state.totalPrice - priceDelta;
         this.setState({
-            totalPrice: newPrice, ingredients: updatedIngredients
+            totalPrice: newPrice,
+            ingredients: updatedIngredients
         })
+    }
+
+    checkoutHandler = () => {
+        this.setState({checkoutMode: true});
+    }
+
+    checkoutCanceledHandler = () => {
+        this.setState({checkoutMode: false});
+    }
+
+    checkoutSuccessHandler = () => {
+        this.setState({checkoutMode: false});
+        alert('Burger ordered');
     }
 
     render() {
@@ -58,12 +76,22 @@ class BurgerBuilder extends Component {
         }
         return (
             <div>
+                <Modal 
+                    show={this.state.checkoutMode}
+                    modalClosed={this.checkoutCanceledHandler}>
+                    <OrderSummary
+                        ingredients={this.state.ingredients}
+                        price={this.state.totalPrice} 
+                        cancel={this.checkoutCanceledHandler}
+                        checkout={this.checkoutSuccessHandler} />
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <IngredientController
                     ingredientAdded={this.addIngredientHandler}
                     ingredientRemoved={this.removeIngredientHandler}
                     disabled={disableInfo}
                     price={this.state.totalPrice}
+                    checkout={this.checkoutHandler}
                 />
             </div>
         );
