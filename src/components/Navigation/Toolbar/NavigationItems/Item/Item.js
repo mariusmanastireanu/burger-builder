@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Item.css"
+import "./Item.css"
 
 const item = (props) => (
     <li className="Item">

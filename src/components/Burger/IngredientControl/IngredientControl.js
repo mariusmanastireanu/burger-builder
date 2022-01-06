@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./IngredientControl.css"
+import "./IngredientControl.css"
 
 const ingredientControl = ( props ) => (
     <div className="IngredientControl">
