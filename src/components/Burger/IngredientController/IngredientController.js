@@ -1,6 +1,6 @@
 import React from "react"
 import IngredientControl from "../IngredientControl/IngredientControl"
-import classes from './IngredientController.css'
+import './IngredientController.css'
 import { BASE_PRICE}  from "../../../containers/BurgerBuilder/BurgerBuilder"
 
 const controls = [
