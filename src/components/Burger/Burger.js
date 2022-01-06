@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import Ingredient from "../Ingredient/Ingredient";
+import Ingredient from "./Ingredient/Ingredient";
 import classes from './Burger.css'
 
 const burger = ( props ) => {
