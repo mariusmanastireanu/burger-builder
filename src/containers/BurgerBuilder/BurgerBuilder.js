@@ -3,6 +3,7 @@ import Burger from "../../components/Burger/Burger";
 import IngredientController from "../../components/Burger/IngredientController/IngredientController";
 import Modal from "../../components/UI/Modal/Modal"
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary"
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 const INGREDIENT_PRICES = {
     salad: 0.3,
@@ -19,6 +20,7 @@ class BurgerBuilder extends Component {
         ingredients: {},
         totalPrice: BASE_PRICE,
         checkoutMode: false,
+        loading: false,
     }
 
     addIngredientHandler = ( type ) => {
@@ -63,8 +65,12 @@ class BurgerBuilder extends Component {
     }
 
     checkoutSuccessHandler = () => {
-        this.setState({checkoutMode: false});
-        alert('Burger ordered');
+        this.setState({loading: true});
+        setTimeout(() => {
+            // mock method
+            this.setState({checkoutMode: false, loading: false});
+            alert("Burger ordered");
+        }, 2000);
     }
 
     render() {
@@ -74,16 +80,20 @@ class BurgerBuilder extends Component {
         for (let key in disableInfo) {
             disableInfo[key] = disableInfo[key] === 0;
         }
+        let orderSummary = (<OrderSummary
+            ingredients={this.state.ingredients}
+            price={this.state.totalPrice} 
+            cancel={this.checkoutCanceledHandler}
+            checkout={this.checkoutSuccessHandler} />);
+        if (this.state.loading === true) {
+            orderSummary = <Spinner />
+        }
         return (
             <div>
                 <Modal 
                     show={this.state.checkoutMode}
                     modalClosed={this.checkoutCanceledHandler}>
-                    <OrderSummary
-                        ingredients={this.state.ingredients}
-                        price={this.state.totalPrice} 
-                        cancel={this.checkoutCanceledHandler}
-                        checkout={this.checkoutSuccessHandler} />
+                    {orderSummary}
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <IngredientController
