@@ -5,8 +5,8 @@ import Item from "./Item/Item";
 const navigationItems = ( props ) => (
 
     <ul className="NavigationItems">
-        <Item link="/" active>Burger Builder</Item>
-        <Item link="/">Checkout</Item>
+        <Item link="/">Burger Builder</Item>
+        <Item link="/checkout">Checkout</Item>
     </ul>
 
 );

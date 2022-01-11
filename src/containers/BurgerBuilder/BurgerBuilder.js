@@ -4,6 +4,8 @@ import IngredientController from "../../components/Burger/IngredientController/I
 import Modal from "../../components/UI/Modal/Modal"
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary"
 import Spinner from "../../components/UI/Spinner/Spinner";
+import withNavigationHook from "../../hoc/WithHook/WithNavigationHook";
+import withLocationHook from "../../hoc/WithHook/WithLocationHook";
 
 const INGREDIENT_PRICES = {
     salad: 0.3,
@@ -21,6 +23,15 @@ class BurgerBuilder extends Component {
         totalPrice: BASE_PRICE,
         checkoutMode: false,
         loading: false,
+    }
+
+    componentDidMount() {
+        if (this.props.loc.state && this.props.loc.state.totalPrice && this.props.loc.state.ingredients) {
+            this.setState({
+                totalPrice: this.props.loc.state.totalPrice,
+                ingredients: this.props.loc.state.ingredients
+            });
+        }
     }
 
     addIngredientHandler = ( type ) => {
@@ -69,8 +80,10 @@ class BurgerBuilder extends Component {
         setTimeout(() => {
             // mock method
             this.setState({checkoutMode: false, loading: false});
-            alert("Burger ordered");
-        }, 2000);
+            this.props.nav("/checkout", {
+                state: this.state
+            });
+        }, 1500);
     }
 
     render() {
@@ -109,4 +122,4 @@ class BurgerBuilder extends Component {
 
 }
 
-export default BurgerBuilder
+export default withLocationHook(withNavigationHook(BurgerBuilder));
